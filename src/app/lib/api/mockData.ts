@@ -42,7 +42,7 @@ export const users: User[] = [
   },
 ];
 
-export let competitions: Competition[] = [
+export const competitions: Competition[] = [
   {
     id: "1",
     title: "Mathematics Olympiad",
