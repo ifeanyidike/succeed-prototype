@@ -1,20 +1,17 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { getCompetition } from "@/app/lib/api/competitions";
 import { Competition } from "@/app/lib/types";
 import Link from "next/link";
 import useAuth from "@/app/hooks/useAuth";
 
-export default function CompetitionDetailPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default function CompetitionDetailPage() {
   const [competition, setCompetition] = useState<Competition | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { id } = useParams();
   const router = useRouter();
   const { session, loading: authLoading, user } = useAuth();
 
@@ -26,7 +23,10 @@ export default function CompetitionDetailPage({
 
     const fetchCompetition = async () => {
       try {
-        const competitionData = await getCompetition(params.id, session.user);
+        const competitionData = await getCompetition(
+          id as string,
+          session.user
+        );
         if (!competitionData) {
           setError(
             "Competition not found or you do not have permission to view it"
@@ -42,7 +42,7 @@ export default function CompetitionDetailPage({
     };
 
     fetchCompetition();
-  }, [params.id, router]);
+  }, [id, router]);
 
   if (!session) {
     return null;
